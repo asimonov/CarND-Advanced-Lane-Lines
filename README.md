@@ -30,3 +30,23 @@ show us how you would implement this project from scratch!
 ## Project Implementation by Alexey Simonov.
 
 The entire project is implemented in jupyter notebook called `lane-detection-pipeline-final.ipynb`
+
+First part of the notebook loads the camera calibration images of a chessboard pattern
+and uses `cv2` functions `drawChessboardCorners` and `calibrateCamera` to find the calibration
+matrix and distortion coefficients. 
+These parameters are saved in `calibration_pickle.p` file.
+
+Then I define functions to `undistort` image and function `thresholded_binary` 
+to create a binary image from a color image which is most suitable for lane detection later. 
+It combines sobel transforms, gradients and S channel from HLS color space in a manner
+that I empirically found to produce good results on various given test images.
+
+Next is `perspective_transform` function that has a shape of transform area defined to
+cover the part of the road in front of the car, that is rectangular and covers both lane lines
+and goes some distance in front. This area is visualised in the notebook.
+It gets transforme into a 'bird-eye' view for subsequent line detection.
+
+
+
+
+
