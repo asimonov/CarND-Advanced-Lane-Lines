@@ -38,15 +38,28 @@ These parameters are saved in `calibration_pickle.p` file.
 
 Then I define functions to `undistort` image and function `thresholded_binary` 
 to create a binary image from a color image which is most suitable for lane detection later. 
-It combines sobel transforms, gradients and S channel from HLS color space in a manner
+It combines function calls for sobel transforms, gradients/gradient magnitudes 
+and S channel from HLS color space in a manner
 that I empirically found to produce good results on various given test images.
 
 Next is `perspective_transform` function that has a shape of transform area defined to
 cover the part of the road in front of the car, that is rectangular and covers both lane lines
 and goes some distance in front. This area is visualised in the notebook.
-It gets transforme into a 'bird-eye' view for subsequent line detection.
+It gets transformed into a 'bird-eye' view (where lines should be parallel) 
+for subsequent line detection.
 
+Then I define `Line` class to detect one lane line in a binary image, given input bottom 
+x coordinate
+of its most probable position. The instances of this class hold the information about 
+detection results between calls and re-use it if there are difficulties in line detection
+in subsequent calls.
 
-
+Next `LaneDetection` class is defined to detect both lane lines given unprocessed color image.
+It keeps track of both detected lines using `Line` objects. It also checks for lines to 
+be parallel and reasonable distance apart. 
+It relies on Line objects holding the state from image to image and using it for successful
+detection in subsequent images.
+If detection fails in few consequtive frames
+it tries to detect lines afresh using histogram window.
 
 
