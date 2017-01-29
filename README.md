@@ -91,14 +91,18 @@ I have combined:
 * sobel transforms for X and Y (`sobel_abs_thresholds`), 
 * sobel gradient magnitude (`sobel_magnitude_thresholds`),
 * sobel gradient direction (`sobel_gradidir_thresholds`)
+
 They are combined as:
+
 `binary = (sx & smag) || ( (sy & sgrad) || ( (smag & sgrad) || (sx || s) ) ) `
+
 where:
 * sx is sobel x, 
 * smag is sobel gradient magnitude, 
 * sy is sobel y, 
 * sgrad is sobel gradient,
 * s is S channel in HLS space
+
 I have found this emprically superior to other combinations I tried. The resulting image has quite distinct lane lines that are good input for later stages in the pipeline.
 
 _OpenCV function or other method has been used to correctly rectify each image to a "birds-eye view"_
