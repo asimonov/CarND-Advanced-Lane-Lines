@@ -179,6 +179,7 @@ The `Line` class is persisting the information from previous successful line det
 This is the README file.
 
 The steps taken for the project were:
+
 1. camera calibration implemented and used for to undistort input images
 2. computer vision techniques implemented to transform color image into binary image with as distinct pixels of the lane lines as possible
 3. perspective transform implemented to get the 'top-down' view of the road for easy line detection
@@ -186,7 +187,9 @@ The steps taken for the project were:
 5. `LaneDetector` class implemented to combine all stages of the individual image pipeline and extend it to video processing.
 
 What can be improved:
+
 1. the individual images pipeline can be improved to work better on images from `challenge_video` and `harder_challenge_video`. The current version does not work really well there. 
+
   * It fails on images with shadows and sun glare on the screen. May be fine-tuning thresholding parameters will help here. May be different way of combining different filters will also improve the results.
   * It also fails when curvature of the lane is too steep. May be decreasing size of sliding window size can help here.
 2. the video pipeline
