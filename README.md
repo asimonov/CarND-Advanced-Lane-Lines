@@ -159,12 +159,14 @@ The notebook produces `project_video_annotated.mp4` video, using the provided vi
 **_In the first few frames of video, the algorithm should perform a search without prior assumptions about where the lines are (i.e., no hard coded values to start with). Once a high-confidence detection is achieved, that positional knowledge may be used in future iterations as a starting point to find the lines._**
 
 **Alexey Simonov**:
+`LaneDetector.process_image` (main pipeline function) counts the frames as part of the processing. Once it reaches the specified number of frames (passed to class constructor or defaulted to class constant `_initial_images_number`) it starts to annotate images with detected lane lines and the space between them. For the first few frames it uses the histogram search method from `Line` class. The subsequent frames use the prior knowledge and start detecting the lines from information found in previous frames.
 
 
 
 **_As soon as a high confidence detection of the lane lines has been achieved, that information should be propagated to the detection step for the next frame of the video, both as a means of saving time on detection and in order to reject outliers (anomalous detections)._**
 
 **Alexey Simonov**:
+The `Line` class is persisting the information from previous successful line detection. `LaneDetector` class has two instances of `Line` objects -- one for left and right lines.
 
 
 
@@ -174,6 +176,20 @@ The notebook produces `project_video_annotated.mp4` video, using the provided vi
 
 **Alexey Simonov**:
 
+This is the README file.
+
+The steps taken for the project were:
+1. camera calibration implemented and used for to undistort input images
+2. computer vision techniques implemented to transform color image into binary image with as distinct pixels of the lane lines as possible
+3. perspective transform implemented to get the 'top-down' view of the road for easy line detection
+4. `Line` class implemented to hold the state of line detection and implement initial search using histogram methods, as well as detailed line pixel detection using sliding window method. It then fits the lines using parabolic functions and calculates few details like line curvature and position with respect to the vehicle.
+5. `LaneDetector` class implemented to combine all stages of the individual image pipeline and extend it to video processing.
+
+What can be improved:
+1. the individual images pipeline can be improved to work better on images from `challenge_video` and `harder_challenge_video`. The current version does not work really well there. 
+  * It fails on images with shadows and sun glare on the screen. May be fine-tuning thresholding parameters will help here. May be different way of combining different filters will also improve the results.
+  * It also fails when curvature of the lane is too steep. May be decreasing size of sliding window size can help here.
+2. the video pipeline
 
 
 
