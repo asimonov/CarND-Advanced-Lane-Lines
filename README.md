@@ -41,6 +41,7 @@ to create a binary image from a color image which is most suitable for lane dete
 It combines function calls for sobel transforms, gradients/gradient magnitudes 
 and S channel from HLS color space in a manner
 that I empirically found to produce good results on various given test images.
+The notebook shows intermediate results calculated in this function to arrive at final binary image.
 
 Next is `perspective_transform` function that has a shape of transform area defined to
 cover the part of the road in front of the car, that is rectangular and covers both lane lines
@@ -197,5 +198,5 @@ What can be improved:
   * fine-tune detection by calling existing `Line` methods with slightly better guesses
   * could use more involved logic given different combinations of detection confidence measures, line positions and curvature
 
-
+**NB**: there is no `output_images` folder showing examples for each stage of the pipeline. Instead the provided jupyter notebook displays intermediate images as the pipeline is defined.
 
