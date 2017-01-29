@@ -65,24 +65,29 @@ it tries to detect lines afresh using histogram window.
 The lane with low confidence of right detection is annotated with lines shown in red.
 Frames with high confidence detection have lines shown in blue.
 
+
+
 ## Rubrics Comments
 
 ### Camera Calibraion
 
-_OpenCV functions or other methods were used to calculate the correct camera matrix and distortion coefficients using the calibration chessboard images provided in the repository. The distortion matrix should be used to un-distort the test calibration image provided as a demonstration that the calibration is correct_
+**_OpenCV functions or other methods were used to calculate the correct camera matrix and distortion coefficients using the calibration chessboard images provided in the repository. The distortion matrix should be used to un-distort the test calibration image provided as a demonstration that the calibration is correct_**
 
 **Alexey Simonov**: 
 `cv2` functions `drawChessboardCorners` and `calibrateCamera` used. See first part of the notebook.
 
 
+
 ### Pipeline (Single Images)
 
-_Distortion correction that was calculated via camera calibration has been correctly applied to each image._
+**_Distortion correction that was calculated via camera calibration has been correctly applied to each image._**
 
 **Alexey Simonov**:
 Function `undistort` is called as part of pipeline in `LaneDetector.process_image` for each processed image.
 
-_At least two methods (i.e., color transforms, gradients) have been combined to create a binary image containing likely lane pixels. There is no "ground truth" here, just visual verification that the pixels identified as part of the lane lines are, in fact, part of the lines._
+
+
+**_At least two methods (i.e., color transforms, gradients) have been combined to create a binary image containing likely lane pixels. There is no "ground truth" here, just visual verification that the pixels identified as part of the lane lines are, in fact, part of the lines._**
 
 **Alexey Simonov**:
 The function that creates binary image is `threshold_binary`.
@@ -105,14 +110,18 @@ where:
 
 I have found this emprically superior to other combinations I tried. The resulting image has quite distinct lane lines that are good input for later stages in the pipeline.
 
-_OpenCV function or other method has been used to correctly rectify each image to a "birds-eye view"_
+
+
+**_OpenCV function or other method has been used to correctly rectify each image to a "birds-eye view"_**
 
 **Alexey Simonov**:
 The function that creates 'top-down' image is `perspective_transform`.
 It calls `getPerspectiveTransform` and `warpPerspective` functions from `OpenCV`.
 I have found the shape of the area to be transformed using empirical tests -- looking for resulting top down image to have lane lines as parallel as possible on provided 6 test images.
 
-_Methods have been used to identify lane line pixels in the rectified binary image. The left and right line have been identified and fit with a curved functional form (e.g., spine or polynomial)._
+
+
+**_Methods have been used to identify lane line pixels in the rectified binary image. The left and right line have been identified and fit with a curved functional form (e.g., spine or polynomial)._**
 
 **Alexey Simonov**:
 Two functions from `Line` class do this.
@@ -121,12 +130,16 @@ Two functions from `Line` class do this.
 `use_last_good_fit` method is similar to `fit_from_x_on_image` but is NOT given initial x coordinate. It uses the last fit results to draw line on new image. It is called from the outside by `Detector` class when two detected lines are either too close or not parallel. The lines shown using this method are denoted in red by `Detector` to signify low confidence of detection.
 
 
-_Here the idea is to take the measurements of where the lane lines are and **estimate how much the road is curving and where the vehicle is located** with respect to the center of the lane. The radius of curvature may be given in meters assuming the curve of the road follows a circle and the position of the vehicle within the lane may be given as meters off of center._
+
+**_Here the idea is to take the measurements of where the lane lines are and estimate how much the road is curving and where the vehicle is located with respect to the center of the lane. The radius of curvature may be given in meters assuming the curve of the road follows a circle and the position of the vehicle within the lane may be given as meters off of center._**
 
 **Alexey Simonov**:
 Function `calc_radius_of_curvature` calculates radius of curvature using polynomial coefficients. It calculates that in both pixel and meter coordinates. The position of the line compared to vehicle center is calculated inside
 
-_The fit from the rectified image has been warped back onto the original image and plotted to identify the lane boundaries. This should demonstrate that the lane boundaries were correctly identified._
+
+
+
+**_The fit from the rectified image has been warped back onto the original image and plotted to identify the lane boundaries. This should demonstrate that the lane boundaries were correctly identified._**
 
 **Alexey Simonov**:
 `LaneDetector.annotate_undistorted_image` function warps fitted polynomials and the region between them back from 'top-down' image into original undistorted image.
@@ -136,21 +149,31 @@ _The fit from the rectified image has been warped back onto the original image a
 
 ### Pipeline (Video)
 
-_The image processing pipeline that was established to find the lane lines in images successfully processes the video. The output here should be a new video where the lanes are identified in every frame, and outputs are generated regarding the radius of curvature of the lane and vehicle position within the lane. The identification and estimation don't need to be perfect, but they should not be wildly off in any case. The pipeline should correctly map out curved lines and not fail when shadows or pavement color changes are present._
+**_The image processing pipeline that was established to find the lane lines in images successfully processes the video. The output here should be a new video where the lanes are identified in every frame, and outputs are generated regarding the radius of curvature of the lane and vehicle position within the lane. The identification and estimation don't need to be perfect, but they should not be wildly off in any case. The pipeline should correctly map out curved lines and not fail when shadows or pavement color changes are present._**
 
 **Alexey Simonov**:
 The notebook produces `project_video_annotated.mp4` video, using the provided video of the driving. We can see in the resulting video that detection is achieved after first 5 frames. And it is maintained for the duration of the video. In couple of moments the confidence in detected lines drops and they are show in red. The detection results from previous frames are used in this case, up to 5 failed frames. At which point the pipeline is trying to detect initial x coordinates afresh using histogram method.
 
 
-_In the first few frames of video, the algorithm should perform a search without prior assumptions about where the lines are (i.e., no hard coded values to start with). Once a high-confidence detection is achieved, that positional knowledge may be used in future iterations as a starting point to find the lines._
+
+**_In the first few frames of video, the algorithm should perform a search without prior assumptions about where the lines are (i.e., no hard coded values to start with). Once a high-confidence detection is achieved, that positional knowledge may be used in future iterations as a starting point to find the lines._**
+
+**Alexey Simonov**:
 
 
-_As soon as a high confidence detection of the lane lines has been achieved, that information should be propagated to the detection step for the next frame of the video, both as a means of saving time on detection and in order to reject outliers (anomalous detections)._
+
+**_As soon as a high confidence detection of the lane lines has been achieved, that information should be propagated to the detection step for the next frame of the video, both as a means of saving time on detection and in order to reject outliers (anomalous detections)._**
+
+**Alexey Simonov**:
+
 
 
 ### README
 
-_The Readme file submitted with this project includes a detailed description of what steps were taken to achieve the result, what techniques were used to arrive at a successful result, what could be improved about their algorithm/pipeline, and what hypothetical cases would cause their pipeline to fail._
+**_The Readme file submitted with this project includes a detailed description of what steps were taken to achieve the result, what techniques were used to arrive at a successful result, what could be improved about their algorithm/pipeline, and what hypothetical cases would cause their pipeline to fail._**
+
+**Alexey Simonov**:
+
 
 
 
