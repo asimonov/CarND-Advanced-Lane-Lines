@@ -192,7 +192,10 @@ What can be improved:
 
   * It fails on images with shadows and sun glare on the screen. May be fine-tuning thresholding parameters will help here. May be different way of combining different filters will also improve the results.
   * It also fails when curvature of the lane is too steep. May be decreasing size of sliding window size can help here.
-2. the video pipeline
+2. the video pipeline can be improved with 
+  * more confidence tests of successfull line detection and 
+  * fine-tune detection by calling existing `Line` methods with slightly better guesses
+  * could use more involved logic given different combinations of detection confidence measures, line positions and curvature
 
 
 
